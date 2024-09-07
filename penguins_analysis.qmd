@@ -13,6 +13,7 @@ library(here)
 library(palmerpenguins)
 library(janitor)
 library(plotly)
+library(DataExplorer)
 ```
 
 #### Reading in Data w/ [palmerpenguins](https://allisonhorst.github.io/palmerpenguins/articles/intro.html)
@@ -128,6 +129,24 @@ What other packages/functions do a similar thing?
 
 -   Type you answer(s) in bullet points below
 
+    -   summary tools
+
+    -   Hmisc
+
+    -   skimr
+
+    -   psych
+
+    -   DataExplorer
+
+```{r}
+introduce ("penguins_data_from_csv")
+```
+
+```{r}
+plot_intro (penguins_data_from_csv)
+```
+
 #### Data Visualization
 
 Wohoo!! ggplot is the most common package used for data visualization in R!
@@ -230,7 +249,17 @@ ggplot(data = penguins_data_from_csv, aes(x = flipper_length_mm, y = body_mass_g
     -   In the code chunk below create a histogram with culmen_depth_mm on the x axis and color by species using the dataframe *penguins_data_from_csv*. Give the plot the theme: theme_bw(). Assign a color palette with *scale_fill_viridis_d()*. Give the plot a title, subtitile and custom x and y axis titles.
 
 ```{r}
-
+ggplot(penguins_data_from_csv, aes(x = culmen_depth_mm, fill = species)) +
+  geom_histogram(binwidth = 1, position = "dodge") +
+  theme_bw() +
+  scale_fill_viridis_d() +
+  labs(
+    title = "Culmen Depth Distribution by Species",
+    subtitle = "Penguins dataset",
+    x = "Culmen Depth (mm)",
+    y = "Count",
+    fill = "Species"
+  )
 ```
 
 -   Part 2
