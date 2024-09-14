@@ -3,6 +3,8 @@ title: "Analyzing Penguins Data"
 author: "Connor Flynn"
 format: html
 editor: visual
+editor_options: 
+  chunk_output_type: inline
 ---
 
 #### Loading Libraries
@@ -14,6 +16,8 @@ library(palmerpenguins)
 library(janitor)
 library(plotly)
 library(DataExplorer)
+library(ggplot2)
+library(dplyr)
 ```
 
 #### Reading in Data w/ [palmerpenguins](https://allisonhorst.github.io/palmerpenguins/articles/intro.html)
@@ -257,8 +261,7 @@ ggplot(data = penguins_data_from_csv, aes(x = culmen_depth_mm, fill = species)) 
     title = "Palmer Penguins",
     subtitle = "Distribution of Culmen Depth",
     x = "Culmen Depth (mm)",
-    y = "Number of Penguins",
-  )
+    y = "Number of Penguins")
 ```
 
 -   Part 2
@@ -375,6 +378,20 @@ Our first plots did not call for us to manipulate the data at all. How about if 
       geom_bar(stat = "identity")
     ```
 
+-   
+
+    -   
+
+```         
+geom_bar(stat = "identity") +
+
+theme_bw() +
+
+theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+
+scale_fill_viridis_d()
+```
+
 -   Cool, but let's clean the graph up
 
     ```{r}
@@ -443,9 +460,39 @@ gentoo_adelie_penguins_data_joined <- full_join(gentoo_penguins_data_from_url, a
     1.  Hint: geom_boxplot(), ggplotly()
 
 ```{r}
+library(ggplot2)
+library(plotly)
 
+p <- ggplot(data = penguins_data_from_csv, aes(x = species, y = body_mass_g, fill = species)) +
+  geom_boxplot() +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_viridis_d()
+
+ggplotly(p)
 ```
 
 1.  How many penguins live on Torgersen Island?
+
+    ```{r}
+    penguins_data_from_csv %>%
+      dplyr::filter(island == "Torgersen")
+    ```
+
 2.  Create a dataframe that has the average culmen depth for each species
+
+    ```{r}
+    average_species_culmen_depth <- penguins_data_from_csv %>%
+      group_by(species) %>%
+      summarise(average_culmen_depth = mean(culmen_depth_mm, na.rm = TRUE))
+    ```
+
     1.  Make a bar plot of the new dataframe with species on the x axis and average culmen depth on the y axis
+
+```{r}
+ggplot(data = average_species_culmen_depth, aes(x = species, y = average_culmen_depth, fill = species)) +
+  geom_bar(stat = "identity") +
+  theme_bw() +
+  labs(x = "Species", y = "Average Culmen Depth (mm)", title = "Average Culmen Depth by Penguin Species") +
+  scale_fill_viridis_d()
+```
