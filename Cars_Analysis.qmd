@@ -47,3 +47,31 @@ cars_wt_mpg
 ```{r}
 ggplotly(cars_wt_mpg)
 ```
+
+```{r}
+mtcars_split <- mtcars %>%
+  separate(model, into = c("make", "model"), sep = " ", extra = "merge")
+```
+
+```{r}
+ggplot(data = mtcars_split, aes(x = make, y = mpg, fill = model)) +
+  geom_bar(stat = "identity") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+average_cars_mpg <- mtcars_split %>% 
+  group_by(make) %>%
+  summarise(avg_mpg = mean(mpg))
+```
+
+```{r}
+ggplot(data = average_cars_mpg, aes(y = make, x = avg_mpg)) +
+  geom_bar(stat = "identity")
+```
+
+```{r}
+ggplot(data = average_cars_mpg, aes(y = reorder(make,avg_mpg), x = avg_mpg)) +
+  geom_bar(stat = "identity")
+```
