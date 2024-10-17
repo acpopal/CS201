@@ -274,7 +274,7 @@ penguins %>%
   )
 ```
 
-####  **Practice Activity 3**
+#### **Practice Activity 3**
 
 Starting with `penguins`, in a piped sequence:
 
@@ -317,7 +317,7 @@ penguins %>%
   summarize(across(where(is.numeric), max, na.rm = TRUE))
 ```
 
-####  **Practice Activity 3**
+#### **Practice Activity 3**
 
 Starting from `penguins`, write a piped sequence to:
 

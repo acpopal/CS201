@@ -1,0 +1,123 @@
+---
+title: "EDA Assignment Prep"
+author: "Amber Camp"
+format: html
+editor: visual
+---
+
+## EDA Assignment Prep: Pokemon data
+
+### Libraries
+
+```{r}
+library(here)
+library(tidyverse)
+library(janitor)
+```
+
+### Data
+
+```{r}
+pokedata <- read_csv(here("data/Pokemon.csv"))
+
+pokedata <- pokedata %>%
+  clean_names
+```
+
+### Describe the data:
+
+Data author: **Alberto Barradas**
+
+Description: "This data set includes 721 Pokemon, including their number, name, first and second type, and basic stats: HP, Attack, Defense, Special Attack, Special Defense, and Speed. It has been of great use when teaching statistics to kids. With certain types you can also give a geeky introduction to machine learning.
+
+This are the raw attributes that are used for calculating how much damage an attack will do in the games. This dataset is about the pokemon games (*NOT* pokemon cards or Pokemon Go)."
+
+Link: <https://www.kaggle.com/datasets/abcsds/pokemon?resource=download>
+
+How many observations (rows) are there?: 800
+
+How many variables (columns) are there?: 13
+
+### skimr: Quick overview
+
+```{r}
+skim_data <- skimr::skim(pokedata)
+```
+
+### Summary: Quick overview
+
+```{r}
+summary(pokedata)
+```
+
+### Categorical vs. Continuous
+
+```{r}
+class(pokedata$number) #checks class
+pokedata$number <- as.factor(pokedata$number) #converts to factor, as.numeric would convert it to numeric
+class(pokedata$number)
+summary(pokedata$number)
+
+summary(pokedata$type_1)
+pokedata$type_1 <- as.factor(pokedata$type_1)
+class(pokedata$type_1)
+summary(pokedata$type_1)
+
+summary(pokedata$generation)
+```
+
+How many categorical variables are there? Five \[maybe six\] (number, name, type_1, type_2, generation, \[legendary\]).
+
+How many continuous variables are there? Seven (total, hp, attack, defence, sp_atk, sp_def, speed).
+
+What are some variables of interest to you? type_1 and hp.
+
+```{r}
+
+```
+
+------------------------------------------------------------------------
+
+## EDA Assignment Prep: \[Insert Data Name Here\]
+
+### Libraries
+
+```{r}
+library(here)
+library(tidyverse)
+library(janitor)
+```
+
+### Data
+
+```{r}
+
+```
+
+### Describe the data:
+
+Data author:
+
+Description:
+
+How many observations (rows) are there?
+
+How many variables (columns) are there?
+
+### Summary: Quick overview
+
+```{r}
+
+```
+
+### Categorical vs. Continuous
+
+```{r}
+
+```
+
+How many categorical variables are there?
+
+How many continuous variables are there?
+
+What are some variables of interest to you?
