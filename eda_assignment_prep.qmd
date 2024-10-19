@@ -42,6 +42,7 @@ How many variables (columns) are there?: 13
 
 ```{r}
 skim_data <- skimr::skim(pokedata)
+#Gives context for the type of data in a dataset (in the column "skim type")
 ```
 
 ### Summary: Quick overview
@@ -54,7 +55,7 @@ summary(pokedata)
 
 ```{r}
 class(pokedata$number) #checks class
-pokedata$number <- as.factor(pokedata$number) #converts to factor, as.numeric would convert it to numeric
+pokedata$number <- as.factor(pokedata$number) #converts to factor, as.numeric would convert it to numeric. reason why this is being converted to factor is because the "number" is actually a label and not measuring anything numeric
 class(pokedata$number)
 summary(pokedata$number)
 
@@ -63,18 +64,20 @@ pokedata$type_1 <- as.factor(pokedata$type_1)
 class(pokedata$type_1)
 summary(pokedata$type_1)
 
-summary(pokedata$generation)
+pokedata$name <- as.factor(pokedata$name)
+pokedata$type_2 <- as.factor(pokedata$type_2)
+pokedata$generation <- as.factor(pokedata$generation)
+
+skim_data <- skimr::skim(pokedata)
 ```
 
 How many categorical variables are there? Five \[maybe six\] (number, name, type_1, type_2, generation, \[legendary\]).
 
 How many continuous variables are there? Seven (total, hp, attack, defence, sp_atk, sp_def, speed).
 
+How many numeric variables are there?
+
 What are some variables of interest to you? type_1 and hp.
-
-```{r}
-
-```
 
 ------------------------------------------------------------------------
 
@@ -86,38 +89,57 @@ What are some variables of interest to you? type_1 and hp.
 library(here)
 library(tidyverse)
 library(janitor)
+library(dplyr)
 ```
 
 ### Data
 
 ```{r}
-
+flowerdata <- read_csv(here("data/flowers.csv"))
 ```
 
 ### Describe the data:
 
-Data author:
+Data author: Maryna Shut
 
-Description:
+Description: This is a dataset with information about 73 different flowers: their names, place of origin, height, longevity, industry use and number of petals.
 
-How many observations (rows) are there?
+How many observations (rows) are there? 72
 
-How many variables (columns) are there?
+How many variables (columns) are there? 10
 
 ### Summary: Quick overview
 
 ```{r}
-
+summary(flowerdata)
 ```
 
 ### Categorical vs. Continuous
 
 ```{r}
-
+skim_data_flowers <- skimr::skim(flowerdata)
 ```
 
-How many categorical variables are there?
+```{r}
+str(flowerdata)
 
-How many continuous variables are there?
+categorical_vars <- flowerdata %>%
+  select_if(function(col) is.factor(col) | is.character(col))
 
-What are some variables of interest to you?
+continuous_vars <- flowerdata %>%
+  select_if(is.numeric)
+
+num_categorical <- ncol(categorical_vars)
+num_continuous <- ncol(continuous_vars)
+
+cat("Number of categorical variables:", num_categorical, "\n")
+cat("Number of continuous variables:", num_continuous, "\n")
+```
+
+How many categorical variables are there? 7.
+
+How many numeric (continuous) variables are there? 3.
+
+What are some variables of interest to you? Color and climate, Place of origin and average number of petals.
+
+What kinds of questions could you explore with this data? Various questions and relationships can be explored with this data. Such as: "Is there a correlation between the color(s) of a flower and the climate where it grows?," or, "Does a flower's place of origin determine the number of petals it has?".
