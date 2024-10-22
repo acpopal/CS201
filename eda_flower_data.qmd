@@ -1,0 +1,136 @@
+---
+title: "eda_flower_data"
+format: html
+editor: visual
+---
+
+## Libraries
+
+```{r, message=FALSE}
+library(tidyverse)
+library(here)
+library(janitor)
+```
+
+## Data
+
+Read in the data and clean the column headers using janitor.
+
+```{r, message=FALSE}
+flowerdata <- read_csv(here("data/flowers.csv"))
+
+flowerdata <- flowerdata %>% clean_names()
+```
+
+Remember we have some data that we want to treat as factor, so let's go ahead and convert them now. This is carried over from last class
+
+```{r, message=FALSE, results='hide'}
+skim_data_before_flower <- skimr::skim(flowerdata)
+
+flowerdata$name <- as.factor(flowerdata$name)
+flowerdata$height_cm <- as.factor(flowerdata$height_cm)
+flowerdata$longevity_years <- as.factor(flowerdata$longevity_years)
+flowerdata$place_of_origin <- as.factor(flowerdata$place_of_origin)
+flowerdata$color <- as.factor(flowerdata$color)
+flowerdata$climate <- as.factor(flowerdata$climate)
+
+#skim_data <- skimr::skim(pokedata)
+```
+
+## Variation and Covariation
+
+```{r, message=FALSE}
+ggplot(flowerdata, aes(x = perfumes)) +
+  geom_histogram(binwidth = 0.05) #binwidth can be used to reflect granuility
+```
+
+```{r, message=FALSE}
+ggplot(flowerdata, aes(x = color)) +
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+### Pause for exploratory questions
+
+When you generate a visual for EDA, you should pause to see what the data is telling you, and perhaps ask yourself questions like:
+
+-   Does your visualization match your expectations? \_\_\_.
+
+-   Which values are the most common? Why?
+
+-   Which values are the least common? Why?
+
+-   Do you see any unusual patterns? What could explain them?
+
+## Take a closer look
+
+\[STOPPED HERE\] Use code that you've already seen elsewhere to focus on certain "regions" of interest in your data.
+
+```{r}
+flowerdata <- flowerdata %>%
+  filter(color < 100)
+
+ggplot(flowerdata_0_100, aes(x = color)) +
+  geom_histogram(binwidth = 1)
+```
+
+## Looking at outliers and unusual data
+
+Outliers are unusual observations that don’t quite fit the overall pattern of the data. They can arise from data entry mistakes, can represent extreme values that were recorded during data collection, or can even indicate significant new discoveries.
+
+```{r, message=FALSE}
+ggplot(pokedata, aes(x = sp_atk)) + 
+  geom_histogram(binwidth = 5)
+```
+
+### Zoom in using coord_cartesian()
+
+Define a window to take a closer look. You can also add an xlim() argument.
+
+```{r, message=FALSE}
+ggplot(pokedata, aes(x = sp_atk)) + 
+  geom_histogram() +
+  coord_cartesian(ylim = c(0, 50)) #"(ylim = c(0, 50))" sets the limit for the y-axis points
+```
+
+## Try again with sp_def
+
+Let's have a look at a similar, but potentially unrelated variable, Special Defense (sp_def).
+
+```{r, message=FALSE}
+ggplot(pokedata, aes(x = sp_def)) + 
+  geom_histogram(binwidth = 5)
+```
+
+### Zoom in using coord_cartesian()
+
+```{r, message=FALSE}
+ggplot(pokedata, aes(x = sp_def)) + 
+  geom_histogram() +
+  coord_cartesian(ylim = c(0, 50))
+```
+
+## How about a scatter plot to see how they correlate?
+
+```{r}
+ggplot(pokedata, aes(x = sp_atk, y = sp_def)) + 
+  geom_point()
+```
+
+## How about some boxplots?
+
+One for sp_atk:
+
+```{r, message=FALSE}
+ggplot(pokedata, aes(y = sp_atk)) +
+  geom_boxplot()
+```
+
+Another for sp_def:
+
+```{r, message=FALSE}
+ggplot(pokedata, aes(y = sp_def)) +
+  geom_boxplot()
+```
+
+### 
