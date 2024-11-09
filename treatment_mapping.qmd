@@ -206,7 +206,7 @@ interactive_completed_treatment_map <- ggplot(percent_completed_by_state_map) +
   theme_minimal()
 
 # Use `girafe` to render the interactive plot
-girafe(ggobj = interactive_completed_treatment_map)
+#girafe(ggobj = interactive_completed_treatment_map)
 
 ```
 
@@ -237,17 +237,57 @@ ggplot(percent_completed_by_state_map) +
     strip.text = element_text(size = 4)
   ) 
 
+#Use 'girafe' to render the interactive plot
+#girafe(ggobj = interactive_completed_treatment_map)
 ```
 
 ### Assignment
 
-1.  Make an interactive map with `ggiraph` showing the percentage of completed treatments that end with no use at discharge
+1.  Make an interactive map with `ggiraph` showing the percentage of completed treatments that end with no use at discharge.
+
+    *-\> People who completed the treatments and have no substance use -\> Take all completed treatments and finding the percent of that that is "no use" at discharge*
+
+    *Hint: Use mutate*
 
     ```{r}
+    percent_completed_no_use_by_state <- teds_d_select %>% #create dataframe
+      group_by(stfips) %>%
+      summarize(completed_no_use_cases = sum(reason == "completed" & freq1_d == "no use", 
+                                             na.rm = TRUE),
+                total_cases = n()) %>% #apply pipe
+      mutate(percentage_completed_no_use = (completed_no_use_cases / total_cases) * 100)#add new column using mutate; values from this column will come from this math
 
+    percent_completed_no_use_by_state$stfips_recode <- sprintf('%02d', percent_completed_no_use_by_state$stfips)#creating new column that adds zero in front of numbers
+
+    colnames(percent_completed_no_use_by_state)[colnames(percent_completed_no_use_by_state) == "stfips_recode"] <- "state_fips"#renaming
+
+    percent_completed_no_use_by_state_map <- full_join(percent_completed_no_use_by_state, 
+                                                        states_map, by = "state_fips")#combines two data frames into 1, "by = state fips" to align with all the data in that column
+
+    #plotting interactive graph
+    percent_completed_no_use_interactive <- ggplot(percent_completed_no_use_by_state_map) +
+      geom_sf_interactive(
+        mapping = aes(
+          geometry = geometry,
+          fill = percentage_completed_no_use,
+          tooltip = paste("State FIPS:", stfips,
+                          "<br>Completed + No Use:", round(percentage_completed_no_use, 2),
+                          "%", "<br>State:", state_name)),
+        color = "#ffffff",
+        size = 0.25) +
+      labs(fill = "% of Completed Treatment 
+           and No Use Episodes") +
+      coord_sf(datum = NA) +
+      theme_minimal()
+
+    percent_completed_no_use_interactive
+
+    girafe(ggobj = percent_completed_no_use_interactive)
     ```
 
 2.  How does the percentage of treatments being completed & percentage of treatments ending with no use vary by the service and length of stay. Create at least 3 visualizations to try and answer this question
+
+    x, y and by fill
 
     ```{r}
 
