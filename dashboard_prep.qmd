@@ -103,7 +103,7 @@ Please make sure you include space for at least three plots and at least one des
 
 What projects have you found that look nice/doable?
 
-heatmaps, ggplotly geom_smooth Linear Regression, and whatever other suggestions you may suggest that I have not heard of.
+heatmaps, ggplotly geom_smooth Linear Regression, and whatever other suggestions you may have that I have not heard of.
 
 Link to resource: <https://rstudio.github.io/flexdashboard/articles/examples.html>\
 
