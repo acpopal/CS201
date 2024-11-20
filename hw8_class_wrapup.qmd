@@ -1,0 +1,108 @@
+---
+title: "Homework 8: Class Wrap-up"
+format: html
+editor: visual
+---
+
+## Homework 8: Class Wrap-up
+
+We are finally at the end of the semester! The final homework for the class will be to summarize and share some of the things we've done so far.
+
+The plan is for everyone to be randomly paired with a tiny topic pertaining to something we've learned together this semester and then submit a code snippet to be presented in class on Wednesday, 11/20.
+
+#### Libraries
+
+```{r, message=FALSE}
+library(tidyverse)
+library(here)
+library(naniar)
+library(gtExtras)
+library(janitor)
+```
+
+### Instructions
+
+1.  Find your assigned topic. Talk to me if you reeeeeeaaaally want to do something else, or trade with someone (but let me know).
+
+2.  Prepare a code snippet that briefly (2-3 mins) explains the topic in the code chunk below, using `penguins` data.
+
+3.  Push to GitHub BY NOON on Wednesday 11/20 (I'll need time to download and compile before class).
+
+4.  Come to class next Wednesday and show us how it's done :)
+
+#### Extra libraries needed (if any)
+
+```{r, message=FALSE}
+library(janitor)
+
+```
+
+#### Read in penguins data
+
+```{r, message=FALSE}
+penguins <- read_csv(here("data/penguins_lter.csv"))
+
+penguins <- penguins %>% 
+  clean_names()
+```
+
+#### Naniar
+
+"Naniar" is an R package designed to handle, visualize, and explore missing data effectively.
+
+Some functions of naniar that are beneficial are `miss_var_summary()`, which summarizes the amount of missing data in variables, `gg_miss_var()`, which visualizes the distribution of missing data in variables, and `geom_miss_point()`, which allows for visualizing missingness within scatterplots to explore patterns in missing data across two variables.
+
+Explore Missing Data:
+
+The first function provides a summary of the missing values for each variable in the dataset. It returns the number and proportion of missing values for all variables.
+
+The second function combines a summary table (`miss_var_summary()`) and a bar plot (`gg_miss_var()`) to provide both tabular and visual representations of missing values in the dataset.
+
+```{r}
+miss_var_summary(penguins)
+
+miss_var_summary(penguins) %>% 
+  gt() %>%
+  gt_theme_guardian() %>% 
+  tab_header(title = "Missingness of variables")
+```
+
+Plotting Missing Data in Distribution:
+
+The first creates a bar plot showing the number of missing values for each variable. It is a quick visual way to assess missingness.
+
+The second combines a summary table (`miss_var_summary()`) and a bar plot (`gg_miss_var()`) to provide both tabular and visual representations of missing values in the dataset.
+
+```{r}
+# plot
+gg_miss_var(penguins) # basic plot
+
+penguins %>% miss_var_summary()
+gg_miss_var(penguins)
+```
+
+Visualizing Missingness with Scatter plots:
+
+The first scatter plot visualizes missing data in the variables `sex` and `culmen_length_mm`. The `geom_miss_point()` function highlights missing values within the data points, enabling an exploration of patterns of missingness.
+
+The second is similar to the previous scatter plot but faceted by `island`. This allows you to examine missingness patterns across different islands in the dataset.
+
+```{r}
+ggplot(penguins, aes(x = sex, y = culmen_length_mm)) +
+  geom_miss_point() +
+  theme_bw(base_size = 16) +
+  labs(title = "Culmen Length by Sex",
+       caption = paste0("Source: ggplot2::penguins")) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+ggplot(penguins, aes(x = sex, y = culmen_length_mm)) +
+  geom_miss_point() +
+  theme_bw(base_size = 16) +
+  labs(title = "Culmen Length by Sex",
+       caption = paste0("Source: ggplot2::penguins")) +
+  facet_wrap(~island) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+```
+
+#### Thank you!... Questions?
