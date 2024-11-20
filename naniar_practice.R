@@ -87,7 +87,7 @@ starwars %>%
   head(150) %>% 
   gt() %>% 
   gt_theme_guardian() %>% 
-  tab_header(title = "Starwards characters") %>% 
+  tab_header(title = "Starwars characters") %>% 
   gt_highlight_rows(rows = is.na(mass),
                     fill = "steelblue") %>% 
   gt_highlight_rows(rows = is.na(hair_color),
